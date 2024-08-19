@@ -16,6 +16,15 @@ makeBook.prototype["printDescription"] = function ()
     + "reader is currently at page " + this.page;   
 };
 
+makeBook.prototype.toggleRead = function ()
+{
+    if (this.hasRead == true)
+        this.hasRead = false;
+    else
+        this.hasRead = true;
+    return this.hasRead;
+}
+
 function addBook(title, author, hasRead, page)
 {
     let book = new makeBook(title, author, hasRead, page);
@@ -53,7 +62,7 @@ function createTable()
     tr.appendChild(th5);
     table.appendChild(tr);
     table.classList.add("entries");
-    document.body.appendChild(table);
+    document.body.insertBefore(table, document.getElementById("newBook"));
 }
 
 function addToTable(book)
@@ -66,6 +75,16 @@ function addToTable(book)
     td2.textContent = book.author;
     let td3 = document.createElement('td');
     td3.textContent = book.hasRead;
+    var toggleReadButton = document.createElement("button");   // var because function scoped
+    toggleReadButton.innerHTML= "toggle";
+    toggleReadButton.classList.add("toggle");
+    toggleReadButton.addEventListener("click", () =>
+    {
+        book.toggleRead();
+        td3.textContent = book.hasRead;
+        td3.appendChild(toggleReadButton);
+    });
+    td3.appendChild(toggleReadButton);
     let td4 = document.createElement('td');
     td4.textContent = book.page;
     let td5 = document.createElement('td');
@@ -117,6 +136,7 @@ function createForm() {
     let submit = document.createElement("button");
     submit.setAttribute("id", "submitForm");
     submit.setAttribute("type", "submit");
+    submit.innerHTML= "submit book";
     // Optional: Append these elements to the form or DOM
     let form = document.createElement("form");
     form.setAttribute("id", "bookForm")
